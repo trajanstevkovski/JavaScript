@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <button type="button" class="btn btn-dark" id="newBook">Enter New Book</button>
+            <button type="button" class="btn btn-dark ml-5" id="showData">Show Books Data</button>
+        </div>
+        <div class="row mt-3">
+            <form id="sharedInfo">
+                <div id="books">
+                    <div id="sharedInfo">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                            </div>
+                            <input name="title" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Publisher</span>
+                            </div>
+                            <input name="publisher" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Year Published</span>
+                            </div>
+                            <input name="year" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Pages</span>
+                            </div>
+                            <input name="length" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">ISBN</span>
+                            </div>
+                            <input name="isbn" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Review</span>
+                            </div>
+                            <textarea name="review" class="form-control" aria-label="With textarea" placeholder="Review...."></textarea>
+                        </div>
+                        <div class="input-group mb-3 mt-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                            </div>
+                            <select class="custom-select " id="inputGroupSelect01" required>
+                                <option selected disabled>Chose book kind</option>
+                                <option value="novel">Novel</option>
+                                <option value="anthology">Anthology</option>
+                            </select>
+                        </div>
+                    </div>
+            </form>
+            <form id="formNovelInfo">
+                <div id="novelinfo">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Author</span>
+                        </div>
+                        <input name="author" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <label class="input-group-text mb-3" for="customRadio">Series</label>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio1" name="customRadio" value="1" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio1">Yes</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-3">
+                        <input type="radio" id="customRadio2" name="customRadio" value="0" class="custom-control-input">
+                        <label class="custom-control-label" for="customRadio2">No</label>
+                    </div>
+                    <div id="series">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Series</span>
+                            </div>
+                            <input name="series" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Series Number</span>
+                            </div>
+                            <input name="seriesNumber" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form id="formAnthologyInfo">
+                <div id="anthologyinfo">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Editor</span>
+                        </div>
+                        <input name="editor" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <button type="button" id="addStory" class="btn btn-dark mb-3">Add Story</button>
+                    <div id="stories">
+
+                    </div>
+                </div>
+            </form>
+            <form>
+                <button type="button" id="submitBook" class="btn btn-dark">Submit Book</button>
+                <button type="reset" class="btn btn-dark">Reset Fields</button>
+                <button type="button" id="cancel" class="btn btn-dark">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div id="dataTable" class="row mt-5">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <button id="mainFilter" class="btn btn-default btn-block mb-3">Filter</button>
+                    <div id="strictFilter" class="row justify-content-center">
+                        <div class="col-12 text-center mb-3">
+                            <button class="btn btn-secundary mb-3 mr-2 fixedFilter">Filter Novels</button>  
+                            <button class="btn btn-secundary mb-3 mr-2 fixedFilter">Filter Novels with series</button>  
+                            <button class="btn btn-secundary mb-3 mr-2 fixedFilter">Filter Anthology</button>  
+                            <button class="btn btn-secundary mb-3 mr-2 fixedFilter">Filter Anthology wtih original stories</button>  
+                        </div>
+                        <div class="col-12">
+                                <button id="customFilterBtn" class="btn btn-info btn-block">More Filtering Options</button>
+                            </div>
+                    </div>
+                    <div id="customFilter" class="row justify-content-center">
+                        <div class="col-4 mb-3">
+                            <label for="selAutor">Autor/Editor (hold shift to select more than one):</label>
+                            <select multiple class="form-control" id="selectAuthor">
+                            </select>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="selMinYear">From year:</label>
+                            <select class="form-control" id="selMinYear">
+                            </select>
+                            <label for="selMaxYear">To Year:</label>
+                            <select class="form-control" id="selMaxYear">
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-info btn-block">Fiter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-dark">
+                <thead>
+                    <th scope="col" data-id="hello">ID</th>
+                    <th scope="col">Kind</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author/Editor</th>
+                    <th scope="col">Publishing information</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Aditional Info</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Review</th>
+                    <th scope="col">Action</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <div class="row justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#">Previous</a>
+                            </li>
+                            <li class="mr-3 ml-3"></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

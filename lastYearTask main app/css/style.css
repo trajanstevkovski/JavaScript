@@ -1,0 +1,31 @@
+#books{
+    display: none;
+}
+
+#novelinfo{
+    display: none;
+}
+
+#series{
+    display: none;
+}
+
+#anthologyinfo{
+    display: none;
+}
+
+#stories{
+    display: none;
+}
+
+#dataTable{
+    display: none;
+}
+
+#strictFilter{
+    display: none;
+}
+
+#customFilter{
+    display: none;
+}
