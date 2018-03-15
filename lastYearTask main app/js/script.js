@@ -1712,21 +1712,22 @@ $(document).ready(function () {
                 $("#dataTable").show();
                 _that.showData(_that.pageData(books), 0);
             });
+            let filterBy, sortBy;
             let page = 0;
             $(".page-item").on("click", function (e) {
                 e.preventDefault();
                 if (e.target.text == "Next") {
                     page++;
-                    if (page > books.length / 10) {
-                        page = Math.floor(books.length / 10);
+                    if(page > _that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length / 10){
+                        page = Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length / 10);
                     }
-                    _that.showData(_that.pageData(books), page)
+                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)), page);
                 } else {
                     page--;
                     if (page <= 0) {
                         page = 0;
                     }
-                    _that.showData(_that.pageData(books), page);
+                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy,sortBy),books)), page);
                 }
             });
 
@@ -1747,7 +1748,8 @@ $(document).ready(function () {
             // SORT DATA ====================================
 
             $(document).on("click", "th", function (e) {
-                _that.sortOrder(e.target.textContent, page);
+                sortBy = e.target.textContent;
+                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)),page);
             });
 
             // SORT DATA ====================================
@@ -1775,7 +1777,19 @@ $(document).ready(function () {
             });
 
             $(document).on("click", ".fixedFilter", function(e){
-                _that.filterData(books, e.target.textContent , page);
+                filterBy = e.target.textContent;
+                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)),page);
+            });
+
+            $(document).on("click", "#customFilterStart", function(e){
+                e.preventDefault();
+                    let info = $("#filterByCustom").serializeArray();
+                    filterBy = e.target.getAttributeNode("filter-id").value;
+                    _that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books);
+                    if($("#strictFilter").attr("style") == "display: block;"){
+                        $("#strictFilter").hide();
+                        $("#customFilter").hide(); 
+                    }
             });
             // FILTER DATA ===================================
         }
@@ -1827,10 +1841,29 @@ $(document).ready(function () {
 
         // SHOW DATA =========================================
 
-        this.pageData = function (books) {
+        this.sortFilterParams = function(filterBy, sortBy, moreFilterInfo){
+            console.log(arguments)
+                return {"filter": filterBy, "sort": sortBy, "filterBy": moreFilterInfo};
+        }
+//  TREBA DA SE SMENI CUSTOM FILTER DA PROVERUVA KOGA KE PROVERI DALI E UNDIFINED
+        this.dataFiltered = function(params, data){
+            if(params.filter == "customFilter" && params.sort != undefined){
+                return this.sortOrder(this.filterData(data, params.filter, params.filterBy),params.sort);
+            } else if(params.filter == "customFilter" && params.sort == undefined){
+                return this.filterData(data, params.filter, params.filterBy);
+            } else if(params.filter != undefined && params.sort != undefined){
+                return this.sortOrder(this.filterData(data, params.filter), params.sort);
+            } else if(params.filter != undefined && params.sort == undefined){
+                return this.filterData(data, params.filter);
+            } else if(params.filter == undefined && params.sort != undefined){
+                return this.sortOrder(data, params.sort);
+            } else return data;
+        }
+
+        this.pageData = function (data) {
             let showBooks = []
-            for (let i = 0; i < books.length / 10; i++) {
-                showBooks.push(books.slice(i * 10, (i + 1) * 10));
+            for (let i = 0; i < data.length / 10; i++) {
+                showBooks.push(data.slice(i * 10, (i + 1) * 10));
             }
             return showBooks;
         }
@@ -1910,22 +1943,19 @@ $(document).ready(function () {
 
         // SORT DATA ===================================
 
-        this.sortOrder = function (orderBy, page) {
-            switch (orderBy) {
+        this.sortOrder = function (data, sortBy) {
+            switch (sortBy) {
                 case  "ID":
-                    books.sort((a,b) => a.id - b.id);
-                    this.showData(this.pageData(books), page);
-                    break;
+                    data.sort((a,b) => a.id - b.id);
+                    return data;
                 case "Kind":
-                    books.sort((a, b) => a.kind.localeCompare(b.kind))
-                    this.showData(this.pageData(books), page);
-                    break;
+                    data.sort((a, b) => a.kind.localeCompare(b.kind))
+                    return data;
                 case "Title":
-                    books.sort((a, b) => a.title.localeCompare(b.title));
-                    this.showData(this.pageData(books), page);
-                    break;
+                    data.sort((a, b) => a.title.localeCompare(b.title));
+                    return data;
                 case "Author/Editor":
-                    books.sort((a, b) => {
+                    data.sort((a, b) => {
                         if (a.author != undefined) {
                             return a.author.localeCompare(b.author);
                         }
@@ -1933,19 +1963,15 @@ $(document).ready(function () {
                             return a.editor.localeCompare(b.author);
                         }
                     });
-                    this.showData(this.pageData(books), page);
-                    break;
+                    return data;
                 case "Length":
-                    books.sort((a, b) => parseInt(a.length) - parseInt(b.length));
-                    this.showData(this.pageData(books), page);
-                    break;
+                    data.sort((a, b) => parseInt(a.length) - parseInt(b.length));
+                    return data;
                 case "Publishing information":
-                    books.sort((a,b) => a.year - b.year);
-                    this.showData(this.pageData(books),page);
-                    break;
+                    data.sort((a,b) => a.year - b.year);
+                    return data;
                 default:
-                    this.showData(this.pageData(books), page);
-                    break;
+                    return books;
             }
         }
         
@@ -1966,7 +1992,7 @@ $(document).ready(function () {
                 return output.indexOf(item) == pos;
             })
             filteredOutput.forEach(element => {
-                $("#selectAuthor").append($(`<option>`).attr("value",`element`).text(element));
+                $("#selectAuthor").append($(`<option>`).attr("value",`${element}`).text(element));
             });
             
         }
@@ -1981,25 +2007,60 @@ $(document).ready(function () {
             }
         }
 
-        this.filterData = function(books, target, page){
-            console.log(target);
+        this.filterData = function(data, target, filterBy){
             switch(target){
                 case "Filter Novels":
-                    let filteredNovels = books.filter(element => {
+                    let filteredNovels = data.filter(element => {
                         if(element.kind == "Novel"){
                             return element;
                         }
                     });
-                    this.showData(this.pageData(filteredNovels),page);
-                    break;
+                    return filteredNovels;
                 case "Filter Anthology":
-                    let filteredAnthology = books.filter(element => {
-                        // console.log(element.kind)
+                    let filteredAnthology = data.filter(element => {
                         if(element.kind == "Anthology"){
                             return element;
                         }
                     });
-                    this.showData(this.pageData(filteredAnthology),page);
+                    return filteredAnthology;
+                case "Filter Novels with series":
+                    let filteredNovelsSeries = data.filter(element => {
+                            if(element.series != ""){
+                                return element;
+                            }
+                    });
+                    return filteredNovelsSeries;
+                case "Filter Anthology with original stories":
+                    let filteredAnthologyOriginal = data.filter(element => {
+                        let count = 0;
+                        if(element.kind == "Anthology"){
+                            element.stories.forEach(original => {
+                                if(original.original == true){
+                                    count++;
+                                }
+                            });
+                        }
+                        if(count > 0){
+                            return element;
+                        }
+                    });
+                    if(filteredAnthologyOriginal.length < 1){
+                        alert("No anthology contains original stories");
+                        return data;
+                    } else return filteredAnthologyOriginal;
+                case "customFilter":
+                    let customFiltered = [];
+                    if(filterBy.length > 0){
+                        for (let index = 0; index < filterBy.length; index++) {
+                            customFiltered.push(data.filter(element => {
+                                if(element.author == filterBy[index].value){
+                                    return element;
+                                }
+                            }));
+                        }    
+                    }
+                    let reducedCustomFiltered = customFiltered.reduce((acumulator, currenValue) => acumulator.concat(currenValue), []);
+                    console.log(reducedCustomFiltered);
                     break;
             }
         }
