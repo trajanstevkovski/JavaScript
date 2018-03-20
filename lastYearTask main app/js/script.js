@@ -1641,7 +1641,6 @@ $(document).ready(function () {
             $("#addStory").on("click", function (e) {
                 e.preventDefault();
                 index++;
-                console.log(index)
                 $("#stories").show()
                 $("#stories").append($(`<div class="input-group mt-3 mb-3">
                                         <div class="input-group-prepend">
@@ -1706,31 +1705,31 @@ $(document).ready(function () {
             // ENTER NEW BOOK ==============================
 
             // SHOW DATA ====================================
-
+            let filterBy, sortBy, info;
+            let page = 0;
             $("#showData").on("click", function (e) {
                 $("tbody").empty();
                 $("#dataTable").show();
                 _that.showData(_that.pageData(books), 0);
             });
-            let filterBy, sortBy;
-            let page = 0;
+            
             $(".page-item").on("click", function (e) {
                 e.preventDefault();
                 if (e.target.text == "Next") {
                     page++;
-                    if(page > _that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length / 10){
-                        page = Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length / 10);
+                    if(page > _that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length / 10){
+                        page = Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length / 10);
                     }
-                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)), page);
+                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books)), page);
                 } else {
                     page--;
                     if (page <= 0) {
                         page = 0;
                     }
-                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy,sortBy),books)), page);
+                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy,sortBy,info),books)), page);
                 }
             });
-
+            // Delete BOok
             $(document).on("click", ".btn-warning", function (e) {
                 console.log(e.target.id);
                 let deleteId = e.target.id.substr(e.target.id.length - 1);
@@ -1749,7 +1748,7 @@ $(document).ready(function () {
 
             $(document).on("click", "th", function (e) {
                 sortBy = e.target.textContent;
-                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)),page);
+                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books)),page > Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length/10) ? Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length/10) : page);
             });
 
             // SORT DATA ====================================
@@ -1778,14 +1777,15 @@ $(document).ready(function () {
 
             $(document).on("click", ".fixedFilter", function(e){
                 filterBy = e.target.textContent;
-                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)),page);
+                // Da Probam malce da skratam vo dolzina na linija :D
+                _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books)),page > Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length/10) ? Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy),books).length/10) : page);
             });
 
             $(document).on("click", "#customFilterStart", function(e){
                 e.preventDefault();
-                    let info = $("#filterByCustom").serializeArray();
+                    info = $("#filterByCustom").serializeArray();
                     filterBy = e.target.getAttributeNode("filter-id").value;
-                    _that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books);
+                    _that.showData(_that.pageData(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books)),page > Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length/10) ? Math.floor(_that.dataFiltered(_that.sortFilterParams(filterBy, sortBy, info),books).length/10) : page);
                     if($("#strictFilter").attr("style") == "display: block;"){
                         $("#strictFilter").hide();
                         $("#customFilter").hide(); 
@@ -1842,10 +1842,9 @@ $(document).ready(function () {
         // SHOW DATA =========================================
 
         this.sortFilterParams = function(filterBy, sortBy, moreFilterInfo){
-            console.log(arguments)
                 return {"filter": filterBy, "sort": sortBy, "filterBy": moreFilterInfo};
         }
-//  TREBA DA SE SMENI CUSTOM FILTER DA PROVERUVA KOGA KE PROVERI DALI E UNDIFINED
+//  TREBA DA SE SMENI CUSTOM FILTER DA PROVERUVA!!! KOGA KE PROVERI DALI E UNDIFINED ??
         this.dataFiltered = function(params, data){
             if(params.filter == "customFilter" && params.sort != undefined){
                 return this.sortOrder(this.filterData(data, params.filter, params.filterBy),params.sort);
@@ -1996,7 +1995,7 @@ $(document).ready(function () {
             });
             
         }
-
+        // Treba da se napravi za max Year meni
         this.selectYear = function(books){
             books.sort((a,b) => a.year - b.year);
             let lowYear = books[0].year;
@@ -2025,7 +2024,7 @@ $(document).ready(function () {
                     return filteredAnthology;
                 case "Filter Novels with series":
                     let filteredNovelsSeries = data.filter(element => {
-                            if(element.series != ""){
+                            if(element.kind == "Novel" && element.series != ""){
                                 return element;
                             }
                     });
@@ -2049,8 +2048,17 @@ $(document).ready(function () {
                         return data;
                     } else return filteredAnthologyOriginal;
                 case "customFilter":
+                    let filterByName = [], filterByYear = [];
+                    filterBy.forEach(element => {
+                        if(element.name == "byName"){
+                            console.log(element)
+                            filterByName.push(element);
+                        } else if(element.name == "minYear" || element.name == "maxYear"){
+                            filterByYear.push(element);
+                        }
+                    });
                     let customFiltered = [];
-                    if(filterBy.length > 0){
+                    if(filterBy != undefined && filterBy.length > 0){
                         for (let index = 0; index < filterBy.length; index++) {
                             customFiltered.push(data.filter(element => {
                                 if(element.author == filterBy[index].value){
@@ -2061,7 +2069,7 @@ $(document).ready(function () {
                     }
                     let reducedCustomFiltered = customFiltered.reduce((acumulator, currenValue) => acumulator.concat(currenValue), []);
                     console.log(reducedCustomFiltered);
-                    break;
+                    return reducedCustomFiltered;
             }
         }
 
@@ -2070,4 +2078,4 @@ $(document).ready(function () {
 
     let library = new Library();
     library.init();
-})
+});
