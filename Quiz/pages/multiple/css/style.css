@@ -1,0 +1,11 @@
+.select-menu{
+    width: 40%;
+    height: 40px;
+    border: 2px solid #84817a;
+    border-radius: 10px;
+    text-align-last: center;
+    background-color: #706fd3;
+}
+.select-menu:focus{
+    outline: none;
+}

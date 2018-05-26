@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../media/titleicon.png">
+    <link rel="stylesheet" href="../../shared/sharedStyle/bootstrap.min.css">
+    <link rel="stylesheet" href="../../shared/sharedStyle/sharedStyle.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Multiple Choise QuizGame</title>
+</head>
+<body>
+        <div class="container">
+            <div class="row main-frame">
+                <div class="col-sm-12 col-md-12 justify-content-center">
+                    <form id="mainform" action="">
+                        <h1 class="text-center" id="title"></h1>
+                        <h3 class="text-center">Select Category</h3>
+                        <div id="categories" class="text-center">
+
+                        </div>
+                        <h3 class="text-center">Select Difficulty</h3>
+                        <div class="text-center">
+                            <select class="select-menu" id="difficulty" name="difficulty">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        <h3 class="text-center">Select Answer Type</h3>
+                        <div class="text-center">
+                            <select class="select-menu" id="type" name="type">
+                                <option value="multiple">Multiple Choise</option>
+                                <option value="boolean">True/False</option>
+                            </select>
+                        </div>
+                        <button id="game" class="custom-button">Start Quiz</button>
+                        <button id="back" class="custom-button">Back</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <script src="../../shared/sharedScripts/jquery.js"></script>
+    <script src="../../shared/sharedScripts/sharedScript.js"></script>
+    <script src="script/script.js"></script>
+</body>
+</html>
