@@ -8,11 +8,13 @@ $(document).ready(function () {
             if(service.isValidUrl()){
                 location.replace(service.setUrl());
             }
-            localStorage.clear();
-
+            
             let userData = JSON.parse(window.localStorage.getItem("userData"));
-            localStorage.clear();
             let game = getData.GetData(service.setDataUrl($.getUrlVars()));
+            if(typeof game == "number") {
+                alert("There are not enough questions in this category.\n You will be redirected to start page.");
+                location.replace(service.setUrl());
+            }
             let index = 0;
             _that.showQuestionAndAnswer(game, index)
             $(".question-number").html(`${index+1}/10`);
@@ -67,8 +69,9 @@ $(document).ready(function () {
                 if(e.target.id == "new-game"){
                     location.replace(service.setUrl());
                 } else {
+                    // localStorage.clear(); ********treba da se vrati koga ke se povrze so firebase********
                     localStorage.setItem("userData", JSON.stringify(userData));
-                    location.replace("file:///C:/Users/Trajan/Desktop/Quiz/pages/hishScores/index.html");
+                    location.replace(service.setUrl("highscores"));
                 }
             })
         }

@@ -28,18 +28,21 @@ function URLService() {
         if (mode == "multiple" || mode == "answer") {
             let page = "pages";
             return path + page + "/" + mode + "/" + fileName + "?" + query;
-        } else if(mode != "" && mode != undefined){
+        } else if(mode == "highscores"){
+            let page = "pages/" + mode + "/";
+            return path + page + fileName;
+        }else if (mode != "" && mode != undefined) {
             let page = "pages/" + mode + "/";
             return path + page + fileName + "&" + query;
         } else return path + fileName;
     }
 
-    this.setDataUrl = function(params){
+    this.setDataUrl = function (params) {
         return `https://opentdb.com/api.php?amount=10&category=${params.category}&difficulty=${params.difficulty}&type=${params.type}`;
     }
 
-    this.isValidUrl = function(){
-        if($.getUrlVars().length < 2){
+    this.isValidUrl = function () {
+        if ($.getUrlVars().length < 2) {
             return true
         } else false;
     }
@@ -61,7 +64,7 @@ class TrueFalse {
     constructor(question, correctAnswer) {
         this.Question = question;
         this.CorrectAnswer = correctAnswer;
-        this.PossibleAnswer = [ "True", "False"];
+        this.PossibleAnswer = ["True", "False"];
     }
 }
 class AnswerMode {
@@ -79,7 +82,11 @@ function GetDataService() {
             url: (url),
             async: false,
             success: function (data) {
-                game = _that.setGame(data, type);
+                if(data.response_code == 0){
+                    game = _that.setGame(data, type);
+                } else{
+                    game = data.response_code;
+                }
             }
         })
         return game;

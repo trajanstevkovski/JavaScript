@@ -1,0 +1,55 @@
+.custom-button{
+    display: inline-block;
+    justify-content: space-evenly;
+    width: 30%;
+    height: 40px;
+    margin: 7px auto;
+    cursor: pointer;
+    background-color: #227093;
+    border: 3px solid #84817a;
+    border-radius: 10px;
+}
+
+.selected{
+    background-color: #84817a;
+}
+
+.custom-button:focus{
+    outline: none;
+}
+
+.custom-table{
+    height: 240px;
+    margin-top: 7px;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.header{
+    background-color: #84817a;
+}
+
+.active-score{
+    background-color: #ffda79 !important;
+}
+
+.custom-table tbody{
+    border-bottom: 12px solid #227093;
+}
+
+.custom-box{
+    display: flex;
+    justify-content: center;
+}
+
+.scores-select{
+    height: 160px;
+}
+
+#mode{
+    display: none;
+}
+
+#difficulty{
+    display: none;
+}

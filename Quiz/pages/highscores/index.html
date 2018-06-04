@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../media/titleicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../shared/sharedStyle/bootstrap.min.css">
+    <link rel="stylesheet" href="../../shared/sharedStyle/sharedStyle.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>High Scores</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="offset-2 col-8 main-frame text-center">
+                <div class="row custom-box">
+                    <div class="col-12 scores-select" id="gamemode">
+                        <button class="custom-button" name="answer-mode">Answer Mode</button>
+                        <button class="custom-button" name="multiple-mode">Multiple Mode</button>
+                        <div class="row">
+                            <div class="col-12" id="mode">
+                                <button class="custom-button" name="multiple">Multiple Answers Scores</button>
+                                <button class="custom-button" name="boolean">True/False Scores</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="difficulty">
+                                <button class="custom-button" name="easy">Easy</button>
+                                <button class="custom-button" name="medium">Medium</button>
+                                <button class="custom-button" name="hard">Hard</button>
+                            </div>
+                        </div>
+                        <div class="scores">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="custom-button" id="newgame">New Game</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../../shared/sharedScripts/jquery.js"></script>
+        <script src="../../shared/sharedScripts/sharedScript.js"></script>
+        <script src="script/script.js"></script>
+</body>
+
+</html>
