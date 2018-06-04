@@ -141,7 +141,9 @@ $(document).ready(function () {
             let mode = score[0].mode;
             let diff = score[0].difficulty;
             let oldHighScoreTable = JSON.parse(localStorage.getItem(mode));
-            score.pop();
+            if(score.length <= 4){
+                score.pop();
+            }
             oldHighScoreTable[diff] = score;
             localStorage.removeItem(mode);
             localStorage.setItem(mode,JSON.stringify(oldHighScoreTable));

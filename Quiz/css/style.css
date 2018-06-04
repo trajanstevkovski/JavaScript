@@ -12,6 +12,11 @@ input[name="gameName"]:focus{
   outline: none;
 }
 
+.name-alert{
+  background-color: #ff5252;
+  color: #34ace0;
+}
+
 /* h1 {
   color: #ffdd59;
   margin-bottom: 2rem;
