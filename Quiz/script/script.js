@@ -7,16 +7,16 @@ $(document).ready(function () {
 
             $(".button-startgame").on("click", function (e) {
                 e.preventDefault();
-                console.log($(`input[name="gameName"]`).val().length);
                 if ($(`input[name="gameName"]`).val().length > 15) {
                     $("h1").after($(`<span class="alert name-alert">`).text("Your name must be less that 15 characters long"));
-                }else{
+                } else {
                     window.localStorage.setItem("userData", JSON.stringify({
                         name: "",
                         mode: "",
                         difficulty: "",
                         time: 0,
-                        score: 0
+                        score: 0,
+                        average: 0
                     }));
                     window.location.replace(service.setUrl($(`input[name="select"]:checked`).val(), _that.getQuery()));
                 }
@@ -225,6 +225,41 @@ $(document).ready(function () {
             }
         ]
     }));
+    localStorage.setItem("answer", JSON.stringify([{
+        name: "Blazo",
+        time: 0,
+        score: 0,
+        mode: "answer",
+        average: 300
+    },
+    {
+        name: "Blazo",
+        time: 0,
+        score: 0,
+        mode: "answer",
+        average: 300
+    },
+    {
+        name: "Blazo",
+        time: 0,
+        score: 0,
+        mode: "answer",
+        average: 300
+    },
+    {
+        name: "Blazo",
+        time: 0,
+        score: 0,
+        mode: "answer",
+        average: 300
+    },
+    {
+        name: "Blazo",
+        time: 0,
+        score: 0,
+        mode: "answer",
+        average: 300
+    }]));
     let newGame = new StartGame();
     newGame.init();
 });

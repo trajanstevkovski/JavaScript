@@ -28,17 +28,21 @@ function URLService() {
         if (mode == "multiple" || mode == "answer") {
             let page = "pages";
             return path + page + "/" + mode + "/" + fileName + "?" + query;
-        } else if(mode == "highscores"){
+        } else if (mode == "highscores") {
             let page = "pages/" + mode + "/";
             return path + page + fileName;
-        }else if (mode != "" && mode != undefined) {
+        } else if (mode != "" && mode != undefined) {
             let page = "pages/" + mode + "/";
             return path + page + fileName + "&" + query;
         } else return path + fileName;
     }
 
     this.setDataUrl = function (params) {
-        return `https://opentdb.com/api.php?amount=10&category=${params.category}&difficulty=${params.difficulty}&type=${params.type}`;
+        if(params != undefined){
+            return `https://opentdb.com/api.php?amount=10&category=${params.category}&difficulty=${params.difficulty}&type=${params.type}`;
+        } else {
+            return "https://opentdb.com/api.php?amount=50&type=multiple";
+        }
     }
 
     this.isValidUrl = function () {
@@ -68,7 +72,11 @@ class TrueFalse {
     }
 }
 class AnswerMode {
-    // ... some props here
+    constructor(title, question, answer) {
+        this.Title = title;
+        this.Question = question;
+        this.Answer = answer;
+    }
 }
 
 function GetDataService() {
@@ -82,13 +90,13 @@ function GetDataService() {
             url: (url),
             async: false,
             success: function (data) {
-                if(data.response_code == 0){
+                if (data.response_code == 0) {
                     game = _that.setGame(data, type);
-                } else{
+                } else {
                     game = data.response_code;
                 }
             }
-        })
+        });
         return game;
     }
 
@@ -101,7 +109,7 @@ function GetDataService() {
             success: function (data) {
                 categories = data;
             }
-        })
+        });
         return categories;
     }
 
@@ -118,7 +126,9 @@ function GetDataService() {
         } else if (type == "boolean") {
             data.results.forEach(element => game.push(new TrueFalse(element.question, element.correct_answer)));
         } else {
-            game = undefined;
+            data.results.forEach(element => {
+                game.push(new AnswerMode(element.category, element.question, element.correct_answer));
+            });
         }
         return game;
     }

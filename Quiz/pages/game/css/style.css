@@ -64,9 +64,3 @@ input[type="radio"]{
     -ms-progress-appearance: none;
     -webkit-appearance: none;
 }
-
-.end-score{
-    font-size: 22px;
-    letter-spacing: 2px;
-    padding-top: 5px;
-}

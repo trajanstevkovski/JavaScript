@@ -1,6 +1,45 @@
-.under-construction{
-    background: url(../../../media/screenshot-2.png) center;
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
+.stats{
+    margin-top: 20px;
+}
+
+.game-container {
+    padding: 0px 15px;
+    height: 330px;
+    width: 100%;
+}
+
+.question {
+    margin-top: 20px;
+    height: 200px;
+}
+
+.correct-answer{
+    height: 60px;
+}
+
+input[name="answer"] {
+    width: 40%;
+    display: block;
+    margin: auto;
+    border: 2px solid #84817a;
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: #34ace0;
+}
+
+input[name="answer"]:focus{
+    outline: none;
+    background-color: #34ace0;
+}
+
+.custom-button {
+    display: inline-block;
+}
+
+h4::first-letter {
+    text-transform: capitalize;
+}
+
+h4 {
+    display: inline-block;
 }

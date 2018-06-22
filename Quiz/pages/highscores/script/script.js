@@ -9,9 +9,11 @@ $(document).ready(function () {
             let userData = JSON.parse(localStorage.getItem("userData"));
             let scores = JSON.parse(localStorage.getItem(userData.mode));
             let showScores;
-            console.log(localStorage);
 
-            _that.userShowScores(scores[userData.difficulty], userData);
+            if (userData.mode == "answer") {
+                _that.answerModeUserScores(scores, userData);
+            } else _that.userShowScores(scores[userData.difficulty], userData);
+
 
             $(".scores-select").on("click", "button", function (e) {
                 e.preventDefault();
@@ -29,6 +31,7 @@ $(document).ready(function () {
                     $(".scores").empty();
                     $("#difficulty").hide();
                     $("#mode").hide();
+                    _that.answerModeUserScores(scores);
                     //call some method to show table for answer mode 
                 }
                 if (e.target.name == "boolean" || e.target.name == "multiple") {
@@ -54,6 +57,55 @@ $(document).ready(function () {
 
             $("#newgame").on("click", () => location.replace(service.setUrl()));
         }
+
+        this.answerModeUserScores = function (highScores, score) {
+            $(".scores").empty();
+            let position, legitHighScores;
+            if(score != undefined){
+                let getHighScores = _that.checkHighScores(score, highScores);
+                legitHighScores = getHighScores[0];
+                position = getHighScores[1];
+            } else {
+                legitHighScores = highScores;
+                position = undefined;
+            }
+            let table = $(`<table class="table table-sm table-striped custom-table">`)
+                .append($(`<thead>`)
+                    .append($(`<tr class="header">`)
+                        .append(
+                            $(`<th>`).html("Name"),
+                            $(`<th>`).html("Mode"),
+                            $(`<th>`).html("Correct Answers"),
+                            $(`<th>`).html("Time left"),
+                            $(`<th>`).html("Average time per Question"),
+                        )));
+            table.appendTo($(".scores"));
+            let tbody = $(`<tbody>`);
+            legitHighScores.forEach((element, index) => {
+                let tr = $(`<tr class="${index == position ? "active-score" : ""}">`).append(
+                    $("<td>").text(`${element.name}`),
+                    $("<td>").text(`${element.mode}`),
+                    $("<td>").html(`${element.score}`),
+                    $("<td>").text(`${element.time}`),
+                    $("<td>").html(`${element.average} <abbr title="Time per correct answer">TpCA</abbr>`));
+
+                tbody.append(tr);
+            })
+            table.append(tbody);
+            if (position > 4 || score != undefined) {
+                let secondTbody = $(`<tbody>`);
+
+                let tr = $(`<tr class="bg-primary">`).append(
+                    $("<td>").text(`${score.name}`),
+                    $("<td>").text(`${score.mode}`),
+                    $("<td>").html(`${score.score}`),
+                    $("<td>").text(`${score.time}`),
+                    $("<td>").html(`${score.average} <abbr title="Time per correct answer">TpCA</abbr>`));
+                tr.appendTo(secondTbody);
+                secondTbody.appendTo(table);
+            }
+        }
+
 
         this.userShowScores = function (highScores, score) {
             $(".scores").empty();
@@ -117,12 +169,18 @@ $(document).ready(function () {
                 if (pos != undefined) {
                     return;
                 }
-                if (element.score == score.score) {
-                    if (element.time >= score.time) {
+                if(score.mode != "answer"){
+                    if (element.score == score.score) {
+                        if (element.time >= score.time) {
+                            pos = index;
+                        }
+                    } else if (element.score < score.score) {
                         pos = index;
                     }
-                } else if (element.score < score.score) {
-                    pos = index;
+                } else {
+                    if(score.average < element.average){
+                        pos = index;
+                    }
                 }
                 if (index > 3) {
                     pos = index + 1;
@@ -130,23 +188,29 @@ $(document).ready(function () {
 
             });
             if (pos > 4) {
+                if(highScores.length > 4){
+                    highScores.pop();
+                }
                 return [highScores, pos];
             } else {
                 highScores.splice(pos, 0, score)
+                if(highScores.length > 4){
+                    highScores.pop();
+                }
                 return [highScores, pos];
             }
         }
 
-        this.setScores = function(score){
+        this.setScores = function (score) {
             let mode = score[0].mode;
             let diff = score[0].difficulty;
             let oldHighScoreTable = JSON.parse(localStorage.getItem(mode));
-            if(score.length <= 4){
+            if (score.length <= 4) {
                 score.pop();
             }
             oldHighScoreTable[diff] = score;
             localStorage.removeItem(mode);
-            localStorage.setItem(mode,JSON.stringify(oldHighScoreTable));
+            localStorage.setItem(mode, JSON.stringify(oldHighScoreTable));
         }
     }
 

@@ -42,3 +42,10 @@ h1{
 .custom-color{
     background: #34ace0;
 }
+
+.end-score{
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding-top: 5px;
+    text-transform: capitalize;
+}
