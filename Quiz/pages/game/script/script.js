@@ -148,9 +148,11 @@ $(document).ready(function () {
         }
 
         this.endScreenResults = function(userData){
+            let div = $("<div>").attr("class","col-sm-12 col-md-12 col-lg-12");
             $(".main-frame").empty();
-            $(".main-frame").append($("<h1>").html("Your Score"));
-            $(".main-frame").append(
+            $(".main-frame").append(div);
+            div.append($("<h1>").html("Your Score"));
+            div.append(
                 $("<p>").attr("class","end-score").html(`Name: ${userData.name}`),
                 $("<p>").attr("class","end-score").html(`Difficulty: ${userData.difficulty}`),
                 $("<p>").attr("class","end-score").html(`Mode: ${userData.mode}`),

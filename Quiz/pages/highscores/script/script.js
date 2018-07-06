@@ -19,6 +19,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let parent = $(`button[name="${e.target.name}"]`).parent().attr("id");
                 if (e.target.name == "multiple-mode") {
+                    $(`button[name="answer-mode"]`).removeClass("selected");
                     if ($(`#${parent}`).find(`button.selected`).length != 0) {
                         $(`#${parent}`).find(`button.selected`).removeClass("selected");
                         $(`button[name="${e.target.name}"]`).addClass("selected");
@@ -28,11 +29,12 @@ $(document).ready(function () {
                     $("#mode").show();
                 }
                 if (e.target.name == "answer-mode") {
+                    $(`button[name="multiple-mode"]`).removeClass("selected");
+                    $(`button[name="${e.target.name}"]`).addClass("selected");
                     $(".scores").empty();
                     $("#difficulty").hide();
                     $("#mode").hide();
                     _that.answerModeUserScores(scores);
-                    //call some method to show table for answer mode 
                 }
                 if (e.target.name == "boolean" || e.target.name == "multiple") {
                     if ($(`#${parent}`).find(`button.selected`).length != 0) {
@@ -114,9 +116,7 @@ $(document).ready(function () {
                 header = Object.keys(highScores[0]);
                 legitHighScores = highScores;
                 position = undefined;
-                console.log("Always on the move");
             } else {
-                console.log("Need to be called once at start")
                 header = Object.keys(score);
                 getHighScores = _that.checkHighScores(score, highScores);
                 legitHighScores = getHighScores[0];

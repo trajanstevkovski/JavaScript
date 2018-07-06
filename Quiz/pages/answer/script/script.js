@@ -28,7 +28,7 @@ $(document).ready(function () {
                     _that.showEndScreen(userData);
                     clearInterval(timer);
                 }
-            }, 100);
+            }, 1000);
             setTimeout(function () {
                 timer;
             }, 1500);
@@ -62,10 +62,11 @@ $(document).ready(function () {
                 setTimeout(() => {
                     _that.showQuestion(game, index);
                 }, 2000);
-            })
+            });
 
-            $(".game-container").on("click", "button", function(e){
+            $(".game-container").on("click", `button[name="endscreen"]`, function(e){
                 e.preventDefault();
+                console.log("Wrong Click")
                 if(e.target.id == "new-game"){
                     location.replace(urlService.setUrl());
                 } else {
@@ -139,8 +140,8 @@ $(document).ready(function () {
                 $("<p>").attr("class","end-score").html(`Time left: ${userData.time}`),
                 $("<p>").attr("class","end-score").html(`Correct answers: ${userData.score}`),
                 $("<h2>").html(`Average time per correct answer: ${userData.average} TpCA`),
-                $("<button>").attr({class: "custom-button", id: "submit-highscore"}).html("Submit Highscore"),
-                $("<button>").attr({class: "custom-button", id: "new-game"}).html("Start New Game")
+                $("<button>").attr({class: "custom-button", id: "submit-highscore", name: "endscreen"}).html("Submit Highscore"),
+                $("<button>").attr({class: "custom-button", id: "new-game", name: "endscreen"}).html("Start New Game")
             );
         }
     }
