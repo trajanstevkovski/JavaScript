@@ -38,7 +38,7 @@ function URLService() {
     }
 
     this.setDataUrl = function (params) {
-        if(params != undefined){
+        if (params != undefined) {
             return `https://opentdb.com/api.php?amount=10&category=${params.category}&difficulty=${params.difficulty}&type=${params.type}`;
         } else {
             return "https://opentdb.com/api.php?amount=50&type=multiple";
@@ -145,3 +145,45 @@ function GetDataService() {
 }
 
 //  GET DATA SERVICE =========================================
+
+// Firebase service=================================
+
+function FireBase() {
+    let config = {
+        apiKey: "AIzaSyBpXFzTpEIrczhd048uhEkOpdI58rK0dro",
+        authDomain: "quiz-game-2c9ef.firebaseapp.com",
+        databaseURL: "https://quiz-game-2c9ef.firebaseio.com",
+        projectId: "quiz-game-2c9ef",
+        storageBucket: "",
+        messagingSenderId: "211951453876"
+    };
+    firebase.initializeApp(config);
+    
+    let db = firebase.database();
+
+    this.getData = function(a){
+        return db.ref("scores");
+    }
+
+    this.updateData = function(userData, index){
+        if(userData.Mode != "answer"){
+            db.ref(`scores/${userData.Mode}/${userData.Difficulty}/${index}`).set(userData);
+        } else {
+            db.ref(`scores/${userData.Mode}/${index}`).set(userData);
+        }
+    }
+
+    this.gotData = function (data){
+        let scores = data.val();
+        let keys = Object.keys(scores);
+        for (let i = 0; i < keys.length; i++) {
+            localStorage.setItem(keys[i],JSON.stringify(scores[keys[i]]));
+        }
+    }
+
+    
+
+}
+
+
+// Firebase service=================================

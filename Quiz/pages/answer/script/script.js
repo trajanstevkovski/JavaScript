@@ -9,14 +9,14 @@ $(document).ready(function () {
             _that.setUserData(userData);
             
             // ====Timer
-            let min = userData.time / 60 - 1;
+            let min = userData.Time / 60 - 1;
             let timer = setInterval(() => {
-                userData.time--;
-                $(".timer").html(`0${min}:${userData.time%60}`);
-                if (userData.time % 60 < 10) {
-                    $(".timer").html(`0${min}:0${userData.time%60}`);
+                userData.Time--;
+                $(".timer").html(`0${min}:${userData.Time%60}`);
+                if (userData.Time % 60 < 10) {
+                    $(".timer").html(`0${min}:0${userData.Time%60}`);
                 }
-                if (userData.time % 60 == 0) {
+                if (userData.Time % 60 == 0) {
                     min--;
                 }
                 if (userData.time < 60) {
@@ -24,11 +24,11 @@ $(document).ready(function () {
                         "color": "red"
                     });
                 }
-                if(userData.time == 0){
+                if(userData.Time == 0){
                     _that.showEndScreen(userData);
                     clearInterval(timer);
                 }
-            }, 1000);
+            }, 10);
             setTimeout(function () {
                 timer;
             }, 1500);
@@ -66,7 +66,6 @@ $(document).ready(function () {
 
             $(".game-container").on("click", `button[name="endscreen"]`, function(e){
                 e.preventDefault();
-                console.log("Wrong Click")
                 if(e.target.id == "new-game"){
                     location.replace(urlService.setUrl());
                 } else {
@@ -75,21 +74,12 @@ $(document).ready(function () {
                     location.replace(urlService.setUrl("highscores"));
                 }
             })
-
-            // Za hint zajbancija
-            $(".custom-button").mouseup(function () {
-                    $("#bzz").hide();
-                })
-                .mousedown(function () {
-                    $("#bzz").show();
-                });
-            //   Za Hint zajbancija
         }
 
         this.setUserData = function(userData){
-            userData.time = 300;
-            userData.name = $.getUrlVar("gameName");
-            userData.mode = $.getUrlVar("select");
+            userData.Time = 300;
+            userData.Name = $.getUrlVar("gameName");
+            userData.Mode = $.getUrlVar("select");
         }
 
         this.showQuestion = function (game, index) {
@@ -105,7 +95,7 @@ $(document).ready(function () {
         this.isCorrectAnswer = function (answer, game, index, userData) {
             if (answer.length >= Math.floor(game[index].Answer.length * 0.5)) {
                 if (game[index].Answer.toLowerCase().indexOf(answer.toLowerCase()) >= 0) {
-                    userData.score++;
+                    userData.Score++;
                     $(`<h3>`).html(game[index].Answer).css({
                         "color": "yellow",
                         "padding-top": "10px"
@@ -121,25 +111,25 @@ $(document).ready(function () {
         }
 
         this.endScore = function(userData){
-            if(userData.time == 0){
-                userData.average = (300 - userData.time) / userData.score;
+            if(userData.Time == 0){
+                userData.Average = (300 - userData.Time) / userData.Score;
             }
         }
 
         this.showEndScreen = function(userData){
-            if(userData.score != 0){
-                if(userData.time == 0){
-                    userData.average = (300 / userData.score).toFixed();
-                } else userData.average = ((300 - userData.time) / userData.score).toFixed();
-            } else userData.average = 300;
+            if(userData.Score != 0){
+                if(userData.Time == 0){
+                    userData.Average = (300 / userData.Score).toFixed();
+                } else userData.Average = ((300 - userData.Time) / userData.Score).toFixed();
+            } else userData.Average = 300;
             $(".game-container").empty();
             $(".game-container").addClass("justify-content-center").append($("<h1>").html("Your Score"));
             $(".game-container").append(
-                $("<p>").attr("class","end-score").html(`Name: ${userData.name}`),
-                $("<p>").attr("class","end-score").html(`Mode: ${userData.mode}`),
-                $("<p>").attr("class","end-score").html(`Time left: ${userData.time}`),
-                $("<p>").attr("class","end-score").html(`Correct answers: ${userData.score}`),
-                $("<h2>").html(`Average time per correct answer: ${userData.average} TpCA`),
+                $("<p>").attr("class","end-score").html(`Name: ${userData.Name}`),
+                $("<p>").attr("class","end-score").html(`Mode: ${userData.Mode}`),
+                $("<p>").attr("class","end-score").html(`Time left: ${userData.Time}`),
+                $("<p>").attr("class","end-score").html(`Correct answers: ${userData.Score}`),
+                $("<h2>").html(`Average time per correct answer: ${userData.Average} TpCA`),
                 $("<button>").attr({class: "custom-button", id: "submit-highscore", name: "endscreen"}).html("Submit Highscore"),
                 $("<button>").attr({class: "custom-button", id: "new-game", name: "endscreen"}).html("Start New Game")
             );

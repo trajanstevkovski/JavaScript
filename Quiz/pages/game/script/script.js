@@ -21,20 +21,20 @@ $(document).ready(function () {
             // TIMER ==========================
             let min = 0;
             let timer = setInterval(function(){
-                userData.time++;
-                if(parseInt(userData.time%60) == 59){
+                userData.Time++;
+                if(parseInt(userData.Time%60) == 59){
                     min++;
                 }
-                if(parseInt(userData.time%60) < 10){
+                if(parseInt(userData.Time%60) < 10){
                     if(min < 10){
-                        $(".timer").html("0" + min + ":" + "0" + parseInt(userData.time%60));
+                        $(".timer").html("0" + min + ":" + "0" + parseInt(userData.Time%60));
                     } else
-                    $(".timer").html(min + ":" + "0" + parseInt(userData.time%60));
+                    $(".timer").html(min + ":" + "0" + parseInt(userData.Time%60));
                 }else{
                     if(min < 10){
-                        $(".timer").html("0" + min + ":" + parseInt(userData.time%60));
+                        $(".timer").html("0" + min + ":" + parseInt(userData.Time%60));
                     } else {
-                        $(".timer").html(min + ":" + parseInt(userData.time%60));
+                        $(".timer").html(min + ":" + parseInt(userData.Time%60));
                     }
                 }
             },1000);
@@ -68,8 +68,8 @@ $(document).ready(function () {
                 e.preventDefault();
                 if(e.target.id == "new-game"){
                     location.replace(service.setUrl());
+                    localStorage.clear()
                 } else {
-                    // localStorage.clear(); ********treba da se vrati koga ke se povrze so firebase********
                     localStorage.setItem("userData", JSON.stringify(userData));
                     location.replace(service.setUrl("highscores"));
                 }
@@ -79,7 +79,7 @@ $(document).ready(function () {
         this.isValidAnswer = function (game, index, answer, userData) {
             if (game[index].CorrectAnswer == answer) {
                 $(`label[for="${answer}"]`).addClass("correct-answer-animation");
-                userData.score++;
+                userData.Score++;
             } else {
                 $(`label[for="${answer}"]`).addClass("wrong-answer-animation");
                 $(`label[for="${game[index].CorrectAnswer}"]`).addClass("correct-answer");
@@ -127,9 +127,9 @@ $(document).ready(function () {
 
         this.setUserData = function(userData){
             let data = $.getUrlVars();
-            userData.name = data.gameName;
-            userData.difficulty = data.difficulty;
-            userData.mode = data.type;
+            userData.Name = data.gameName;
+            userData.Difficulty = data.difficulty;
+            userData.Mode = data.type;
         }
 
         this.nextQuestion = function(game, index, userData){
@@ -153,11 +153,11 @@ $(document).ready(function () {
             $(".main-frame").append(div);
             div.append($("<h1>").html("Your Score"));
             div.append(
-                $("<p>").attr("class","end-score").html(`Name: ${userData.name}`),
-                $("<p>").attr("class","end-score").html(`Difficulty: ${userData.difficulty}`),
-                $("<p>").attr("class","end-score").html(`Mode: ${userData.mode}`),
-                $("<p>").attr("class","end-score").html(`Time: ${userData.time}`),
-                $("<h2>").html(`Score: ${userData.score}/10`),
+                $("<p>").attr("class","end-score").html(`Name: ${userData.Name}`),
+                $("<p>").attr("class","end-score").html(`Difficulty: ${userData.Difficulty}`),
+                $("<p>").attr("class","end-score").html(`Mode: ${userData.Mode}`),
+                $("<p>").attr("class","end-score").html(`Time: ${userData.Time}`),
+                $("<h2>").html(`Score: ${userData.Score}/10`),
                 $("<button>").attr({class: "custom-button", id: "submit-highscore"}).html("Submit Highscore"),
                 $("<button>").attr({class: "custom-button", id: "new-game"}).html("Start New Game")
             );
