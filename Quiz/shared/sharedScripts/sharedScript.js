@@ -147,9 +147,9 @@ function GetDataService() {
     }
 }
 
-//  GET DATA SERVICE =========================================
+//  GET DATA SERVICE ===========================================
 
-// Firebase service=================================
+// Firebase service===================================
 
 function FireBase() {
     let config = {
