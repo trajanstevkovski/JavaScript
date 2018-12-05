@@ -14,6 +14,9 @@ $.extend({
     getUrlVar: function (name) {
         return $.getUrlVars()[name];
     },
+    doSomething: function() {
+        console.log("Something");
+    }
 });
 
 // EXTENSION METHOD ================================
